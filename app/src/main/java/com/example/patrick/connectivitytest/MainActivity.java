@@ -208,7 +208,7 @@ public class MainActivity extends ActionBarActivity {
         String urlParameter = "param1="+paramString;
         byte[] postData = urlParameter.getBytes(StandardCharsets.UTF_8);
         String base64 = Base64.encodeToString(postData, Base64.DEFAULT);
-        //int postDataLength = postData.length;
+        int postDataLength = postData.length;
         byte[] uploadData = myurl.getBytes(StandardCharsets.UTF_8);
         int uploadDataLength = uploadData.length;
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -218,21 +218,21 @@ public class MainActivity extends ActionBarActivity {
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         conn.setRequestProperty("charset", "utf-8");
         //conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
-        conn.setRequestProperty("Content-Length", Integer.toString(uploadDataLength));
+        conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
         conn.setUseCaches(false);
-    /*
+
         try( DataOutputStream wr = new DataOutputStream( conn.getOutputStream())) {
             wr.write( postData );
         }
-      */
+
 
         String offsetAmount = base64Encoder(timeZoneBuilder());
-        DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-        wr.write(uploadData);
+        //DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+        //wr.write(uploadData);
         conn.getInputStream();
         String android_id = Settings.Secure.getString(getBaseContext().getContentResolver(),Secure.ANDROID_ID);
         //String contentAsString = readIt(is, len);
-        return base64Encoder(android_id) + "    " + offsetAmount + "      " + base64 + "    " + uploadData;
+        return "uploading data";
     }
     // Given a URL, establishes an HttpUrlConnection and retrieves
 // the web page content as a InputStream, which it returns as
