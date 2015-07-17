@@ -257,7 +257,7 @@ public class MainActivity extends ActionBarActivity {
             is = conn.getInputStream();
 
             // Convert the InputStream into a string
-            JSONObject contentAsString = readIt(is, len);
+            String contentAsString = readIt(is, len);
 
             Log.d("READ ME", contentAsString);
             return contentAsString;
