@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android = "http://schemas.android.com/apk/res/android"
+    android:layout_width = "match_parent"
+    android:layout_height = "match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:baselineAligned="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:paddingTop="10dp"
+            android:padding="10dp">
+            <TextView
+                android:text="Read Webpage"
+                android:textSize="20sp"
+                android:paddingBottom="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText android:id="@+id/myDownloadUrl"
+                android:text="http://ridesharing.cmu-tbank.com/reportActivityForAware.php?userID=1&amp;locations=placeholder@1437076817@LTA0OjAw
+    @40.4436613@-79.945592"
+                android:layout_width = "wrap_content"
+                android:paddingTop="0dp"
+                android:layout_gravity="top"
+                android:layout_height="wrap_content"
+                android:hint="@string/edit_message"
+                android:inputType="textUri" />
+
+            <Button android:id="@+id/GetData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GET"
+                android:onClick="myGetHandler" />
+
+            <TextView
+                android:text="POST to Webpage"
+                android:textSize="20sp"
+                android:paddingTop="50dp"
+                android:paddingBottom="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText android:id="@+id/myUploadUrl"
+                android:text="http://epiwork.hcii.cs.cmu.edu/~afsaneh/connection.php"
+                android:layout_width = "wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/edit_message" />
+
+            <EditText android:id="@+id/param"
+                android:text="Some Parameter"
+                android:layout_width = "wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/edit_message" />
+
+            <Button android:id="@+id/PostData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="POST"
+                android:onClick="myPostHandler" />
+
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true">
+
+                <TextView android:id="@+id/results"
+                    android:layout_height="fill_parent"
+                    android:layout_width="fill_parent"
+                    android:text="results displayed here"
+                    android:paddingTop="50dp"
+                    android:maxLines="75"
+                    android:scrollbars="vertical"
+                    android:nestedScrollingEnabled="true" />
+            </ScrollView>
+
+    </LinearLayout>
+</ScrollView>
