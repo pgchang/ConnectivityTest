@@ -1,5 +1,6 @@
 package com.example.patrick.connectivitytest;
 
+import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -16,6 +17,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URLConnection;
 import java.net.URL;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import java.net.MalformedURLException;
 import java.io.IOException;
@@ -36,6 +40,9 @@ import android.util.Base64;
 import android.provider.Settings.Secure;
 import android.provider.Settings;
 
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends ActionBarActivity {
@@ -239,26 +246,30 @@ public class MainActivity extends ActionBarActivity {
 // a string.
     private String downloadUrl(String myurl) throws IOException {
         InputStream is = null;
+        String lastTimestamp = "21600";
         // Only display the first 2500 characters of the retrieved
         // web page content.
         int len = 2500;
 
         try {
+
+
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000 /* milliseconds */);
+            conn.setReadTimeout(10000  /*milliseconds */); // don't forget the comments
             conn.setConnectTimeout(15000 /* milliseconds */);
+
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
-            Log.d(DEBUG_TAG, "The response is: " + response);
+            Log.d("READ ME", "The response is: " + response);
+
             is = conn.getInputStream();
 
             // Convert the InputStream into a string
             String contentAsString = readIt(is, len);
-
             Log.d("READ ME", contentAsString);
             return contentAsString;
 
@@ -292,5 +303,7 @@ public class MainActivity extends ActionBarActivity {
         String base64 = Base64.encodeToString(stringToByte, Base64.DEFAULT);
         return base64;
     }
+
+
 }
 
