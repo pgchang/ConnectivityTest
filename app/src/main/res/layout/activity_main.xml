@@ -20,7 +20,9 @@
                 android:layout_height="wrap_content" />
 
             <EditText android:id="@+id/myDownloadUrl"
-                android:text="http://epiwork.hcii.cs.cmu.edu/~afsaneh/connection.txt"
+                android:text="http://ridesharing.cmu-tbank.com/reportActivityForAware.php?userID=1&amp;activities=Nzg5MTk3OTFhYmM0NWRhMA==
+    @1437600165@LTA0OjAw
+    @3@100"
                 android:layout_width = "wrap_content"
                 android:paddingTop="0dp"
                 android:layout_gravity="top"

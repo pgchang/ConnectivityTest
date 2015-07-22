@@ -27,7 +27,9 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.io.Reader;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.TimeZone;
 import java.util.Date;
 
@@ -41,9 +43,12 @@ import android.provider.Settings.Secure;
 import android.provider.Settings;
 
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -63,6 +68,14 @@ public class MainActivity extends ActionBarActivity {
         return new String(buffer);
     }
 
+    private static String readAll(Reader rd) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        int cp;
+        while ((cp = rd.read()) != -1) {
+            sb.append((char) cp);
+        }
+        return sb.toString();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
@@ -249,15 +262,22 @@ public class MainActivity extends ActionBarActivity {
         String lastTimestamp = "21600";
         // Only display the first 2500 characters of the retrieved
         // web page content.
-        int len = 2500;
+        int len = 500;
 
         try {
-
-
+            /*
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(myurl);
+            HttpResponse response = httpClient.execute(httpPost);
+            HttpEntity entity = response.getEntity();
+            is = entity.getContent();
+            Log.i("READ ME", is.toString());
+            return "fef";
+            */
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000  /*milliseconds */); // don't forget the comments
-            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setReadTimeout(10000); // milliseconds
+            conn.setConnectTimeout(15000); // milliseconds
 
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
@@ -265,16 +285,23 @@ public class MainActivity extends ActionBarActivity {
             conn.connect();
             int response = conn.getResponseCode();
             Log.d("READ ME", "The response is: " + response);
-
             is = conn.getInputStream();
+            InputStream in = new URL(myurl).openStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
+            String jsonText = readAll(rd);
+
 
             // Convert the InputStream into a string
             String contentAsString = readIt(is, len);
             Log.d("READ ME", contentAsString);
-            return contentAsString;
+            lastTimestamp = findTimestamp(contentAsString);
+            //Log.d("READ ME JSON",lastTimestamp);
+            return lastTimestamp + "   " + contentAsString;
 
             // Makes sure that the InputStream is closed after the app is
             // finished using it.
+
+
         } finally {
             if (is != null) {
                 is.close();
@@ -304,6 +331,18 @@ public class MainActivity extends ActionBarActivity {
         return base64;
     }
 
+    private String findTimestamp (String feed) {
+        /*
+        String[] parts = feed.split(",");
+        String[] timeString = parts[parts.length-1].split(":");
+        Log.i("READ ME", timeString[1]);
+        String[] timeArray = timeString[1].split("\"");
+        return timeArray[1];
+        */
 
+        String[] parts = feed.split("\"");
+        String timestamp = parts[parts.length-2];
+        return timestamp;
+    }
 }
 
