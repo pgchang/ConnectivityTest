@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.TimeZone;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 import android.widget.TextView;
 import android.widget.EditText;
@@ -68,14 +69,7 @@ public class MainActivity extends ActionBarActivity {
         return new String(buffer);
     }
 
-    private static String readAll(Reader rd) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        int cp;
-        while ((cp = rd.read()) != -1) {
-            sb.append((char) cp);
-        }
-        return sb.toString();
-    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
@@ -100,7 +94,7 @@ public class MainActivity extends ActionBarActivity {
 
     // When user clicks button, calls AsyncTask.
     // Before attempting to fetch the URL, makes sure that there is a network connection.
-    public void myGetHandler(View view) {
+    public void myGetHandler(View view) throws IOException, ExecutionException, InterruptedException {
         // Gets the URL from the UI's text field.
         String stringUrl = downloadUrlText.getText().toString();
         Log.i("READ ME PLEASE", stringUrl);
@@ -108,7 +102,10 @@ public class MainActivity extends ActionBarActivity {
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            new DownloadWebpageTask().execute(stringUrl);
+            //new DownloadWebpageTask().execute(stringUrl);
+            String result = new DownloadWebpageTask().execute(stringUrl).get();
+            Log.i("THIS IS SYNC: ", result);
+
         } else {
             //textView.setText("No network connection available.");
             Log.i("READ ME PLEASE", "No connection available");
@@ -159,19 +156,13 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
+    public class DownloadWebpageTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
 
             // params comes from the execute() call: params[0] is the url.
             try {
                 final String result = downloadUrl(urls[0]);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        resultText.setText(result);
-                    }
-                });
                 return downloadUrl(urls[0]);
             } catch (IOException e) {
                 return "Unable to retrieve web page. URL may be invalid.";
@@ -183,7 +174,7 @@ public class MainActivity extends ActionBarActivity {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            //textView.setText(result);
+            resultText.setText(result);
             Log.i("PLEASE READ ME", result);
         }
 
@@ -286,10 +277,6 @@ public class MainActivity extends ActionBarActivity {
             int response = conn.getResponseCode();
             Log.d("READ ME", "The response is: " + response);
             is = conn.getInputStream();
-            InputStream in = new URL(myurl).openStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
-            String jsonText = readAll(rd);
-
 
             // Convert the InputStream into a string
             String contentAsString = readIt(is, len);

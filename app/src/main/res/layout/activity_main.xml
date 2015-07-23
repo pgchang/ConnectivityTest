@@ -20,9 +20,7 @@
                 android:layout_height="wrap_content" />
 
             <EditText android:id="@+id/myDownloadUrl"
-                android:text="http://ridesharing.cmu-tbank.com/reportActivityForAware.php?userID=1&amp;activities=Nzg5MTk3OTFhYmM0NWRhMA==
-    @1437600165@LTA0OjAw
-    @3@100"
+                android:text="http://ridesharing.cmu-tbank.com/reportActivityForAware.php?userID=1&amp;deviceID=NDU1OGQ3N2IwYTQ1MjlkOA==&amp;currentTime=1437678056&amp;timeZone=LTA0OjAw%20&amp;lat=00.000&amp;lng=00.0000"
                 android:layout_width = "wrap_content"
                 android:paddingTop="0dp"
                 android:layout_gravity="top"
